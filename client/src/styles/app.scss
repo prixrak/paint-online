@@ -13,3 +13,27 @@
   width: 100vw;
   background-color: $background-color;
 }
+
+[data-hint] {
+  position: relative; 
+}
+
+[data-hint]::after {
+  content: attr(data-hint); 
+  font-size: 14px;
+  position: absolute; 
+  width: 100px; 
+  left: 0; top: 0; 
+  background: #3989c9; 
+  color: #fff; 
+  padding: 0.5em; 
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+  pointer-events: none; 
+  opacity: 0; 
+  transition: 1s; 
+} 
+
+[data-hint]:hover::after {
+  opacity: 1; 
+  left: 2em; 
+}

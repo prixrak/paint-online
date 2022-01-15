@@ -21,13 +21,6 @@
     }
   }
 
-  label {
-    position: relative;
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-
   input {
     position: absolute;
     top: 0;
