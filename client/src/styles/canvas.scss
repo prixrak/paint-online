@@ -1,0 +1,11 @@
+.canvas {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  background-color: white;
+  box-shadow: 0 0 10px 5px black;
+}

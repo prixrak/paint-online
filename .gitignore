@@ -1,0 +1,8 @@
+
+# dependencies
+/client/node_modules
+/client/package-lock.json
+
+
+# production
+/client/build

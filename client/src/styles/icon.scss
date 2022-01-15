@@ -1,0 +1,14 @@
+.icon {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  box-shadow: 0 0px 5px 2px gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  i {
+    font-size: 24px;
+    color: purple;
+  }
+}

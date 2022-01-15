@@ -1,0 +1,40 @@
+.toolbar {
+  width: 40px;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  box-shadow: 0 4px 5px gray;
+  z-index: 1;
+  justify-content: center;
+
+  i {
+    cursor: pointer;
+    margin-top: 30px;
+    font-size: 24px;
+    color: rgb(105, 37, 52);
+    &:hover {
+      transform: scale(1.1);
+      color: rgb(173, 23, 148);
+    }
+  }
+
+  label {
+    position: relative;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
