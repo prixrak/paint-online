@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 class ToolState {
   tool = null;
+  
   constructor() {
     makeAutoObservable(this);
   }
