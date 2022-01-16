@@ -16,7 +16,10 @@ const Canvas = observer(() => {
 
   return (
     <div className='canvas'>
-      <canvas ref={canvasRef} width={1000} height={600}></canvas>
+      <canvas 
+        onMouseDown={e => canvasState.pushToUndo(e.target.toDataURL())}
+        ref={canvasRef} width={1000} height={600}
+      ></canvas>
     </div>
   );
 });

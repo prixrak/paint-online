@@ -1,8 +1,10 @@
 import React from 'react';
+import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
 import '../styles/settingbar.scss'
 
 const SettingBar = () => {
+
   return (
     <div className='settingbar'>
       <input
@@ -15,8 +17,8 @@ const SettingBar = () => {
         data-hint='Border Color' 
         onChange={e => toolState.setStrokeColor(e.target.value)} 
         type="color"/>
-      <i className="fas fa-undo left"></i>
-      <i className="fas fa-redo"></i>
+      <i className="fas fa-undo left" onClick={() => canvasState.undo()}></i>
+      <i className="fas fa-redo" onClick={() => canvasState.redo()}></i>
       <i className="fas fa-save"></i>
     </div>
   );

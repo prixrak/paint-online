@@ -16,6 +16,7 @@ const Toolbar = () => {
     toolState.setStrokeColor(e.target.value)
     icon.current.style.color =  `${e.target.value}`;
   }
+  
   return (
     <div className='toolbar'>
       <i data-hint='Draw by Brush' className="fas fa-paint-brush" onClick={() => toolState.setTool(new Brush(canvasState.canvas))}></i>
