@@ -1,12 +1,11 @@
 const express = require('express');
-
 const app = express();
-const WSServer = require('express-ws')(app);
+
+const WSServer = require('express-ws')(app); // add ws endpoint to express, func of ws
 const PORT = process.env.PORT || 5000;
-const aWss = WSServer.getWss(); // get add clients
+const aWss = WSServer.getWss(); // get all clients
 
 app.ws('/', (ws, req) => {
-  ws.send('hello')
   ws.on('message', (msg) => {
     msg = JSON.parse(msg);
     switch(msg.method) {
@@ -14,7 +13,7 @@ app.ws('/', (ws, req) => {
         connectionHandler(ws, msg);
         break;
       case 'draw':
-        //
+        broadcastConnection(ws, msg);
         break;
     }
   })
