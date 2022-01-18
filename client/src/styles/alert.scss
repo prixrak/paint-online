@@ -1,0 +1,38 @@
+$widthAlert: 400px;
+@import url('https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap');
+
+@keyframes alertAnimationOpacity {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 100;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.alert {
+  position: absolute;
+  height: 50px;
+  font-size: 20px;
+  bottom: 20px;
+  border: none;
+  min-width: $widthAlert;
+  text-align: center;
+  color: black;
+  border-radius: 4px;
+  height: 40px;
+  line-height: 40px;
+  font-family: 'Dongle', sans-serif;
+  font-size: 35px;
+
+}
+
+.alertTop {
+  position: absolute;
+  animation: alertAnimationOpacity 2s ease-out forwards;
+  z-index: 1;
+  left: calc(50% - #{$widthAlert}/2)
+}

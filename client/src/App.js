@@ -1,10 +1,8 @@
 import React from 'react';
-import Canvas from './components/Canvas';
-import Icon from './components/Icon';
-import SettingBar from './components/SettingBar';
-import Toolbar from './components/Toolbar';
 import './styles/app.scss';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import ModalUser from './pages/ModalUser';
+import Main from './pages/Main';
 
 const App = () => {
   return (
@@ -13,10 +11,8 @@ const App = () => {
         <Routes>
           <Route path='/:id' element={
             <React.Fragment>
-              <Icon />
-              <Toolbar />
-              <SettingBar />
-              <Canvas />
+              <ModalUser />
+              <Main />
             </React.Fragment>
           }>
           </Route>

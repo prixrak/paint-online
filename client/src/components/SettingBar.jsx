@@ -9,7 +9,6 @@ const SettingBar = observer(() => {
 
   const download = () => {
     const dataUrl = canvasState.canvas.toDataURL();
-    console.log(dataUrl);
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = sessionState.socketDraw.sessionId + ".jpg";
@@ -21,18 +20,20 @@ const SettingBar = observer(() => {
   return (
     <div className='settingbar'>
       <input
+        className='settingbar__item settingbar__item-left'
         data-hint='Line Width'
         onChange={e => toolState.setLineWidth(e.target.value)}
         type="number" 
         id='line-width'
         defaultValue={1} min={1} max={50}/>
       <input 
+        className='settingbar__item settingbar__item-left'
         data-hint='Border Color' 
         onChange={e => toolState.setStrokeColor(e.target.value)} 
         type="color"/>
-      <i className="fas fa-undo left" onClick={() => canvasState.undo()}></i>
-      <i className="fas fa-redo" onClick={() => canvasState.redo()}></i>
-      <i className="fas fa-save" onClick={() => download()}></i>
+      <i data-hint='Undo' className="fas fa-undo left settingbar__item settingbar__item-right" onClick={() => canvasState.undo()}></i>
+      <i data-hint='Redo' className="fas fa-redo settingbar__item settingbar__item-right" onClick={() => canvasState.redo()}></i>
+      <i data-hint='Save' className="fas fa-save settingbar__item settingbar__item-right" onClick={() => download()}></i>
     </div>
   );
 });

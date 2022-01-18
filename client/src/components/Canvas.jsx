@@ -12,12 +12,10 @@ import { useParams } from 'react-router-dom';
 import sessionState from '../store/sessionState';
 import Rect from './../tools/Rect';
 import SocketDraw from '../socket/SocketDraw';
-
+import axios from 'axios';
 
 const Canvas = observer(() => {
   const canvasRef = useRef(null);
-  const usernameRef = React.createRef();
-  const [modalShow, setModalShow] = useState(true);
   const { id } = useParams(); // id of session
 
   useEffect(() => {
@@ -41,14 +39,24 @@ const Canvas = observer(() => {
         const msg = JSON.parse(e.data);
         switch(msg.method) {
           case 'connection':
-            if(msg.username !== sessionState.username) console.log("User: " + msg.username + ", come to draw with u :)");
-            else console.log("Nice to see you here :)");
+            if(msg.username !== sessionState.username) sessionState.setAlert({show: true, message:`User: ${msg.username}, come to draw with u :)` });
+            else sessionState.setAlert({show: true, message: `Nice to see you here :)` });
             break;
           case 'draw':
             drawHandler(msg);
             break;
         }
       }
+      let ctx = canvasRef.current.getContext('2d')
+      axios.get(`http://localhost:5000/image?id=${id}`)
+          .then(response => {
+              const img = new Image();
+              img.src = response.data;
+              img.onload = () => {
+                  ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                  ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+              }
+          });
     }
   }, [sessionState.username, id]);
 
@@ -57,10 +65,9 @@ const Canvas = observer(() => {
     const ctx = canvasRef.current.getContext('2d');
     switch (figure.type) {
       case "brush":
-        Brush.draw(ctx, figure.x, figure.y);
+        Brush.draw(ctx, figure.x, figure.y, figure.strokeStyle);
         break;
       case "rect":
-        console.log("i am here");
         Rect.drawStatic(ctx, figure.x, figure.y, figure.width, figure.height, figure.fillStyle, figure.strokeStyle);
         break;
       case "finish":
@@ -69,21 +76,19 @@ const Canvas = observer(() => {
     }
   }
 
-  const connectHandler = () => {
-    if(usernameRef.current?.value !== '') {
-      sessionState.setUsername(usernameRef.current.value);
-      setModalShow(false);
-    }
-  } 
+  const mouseDownHandler = () => {
+    canvasState.pushToUndo(canvasRef.current.toDataURL());
+  }
+
+  const mouseUpHandler = () => { // when mouseUp on canvas -> save state of canvas in img and post it to server
+    axios.post(`http://localhost:5000/image?id=${id}`, {img: canvasRef.current.toDataURL()});
+  }
 
   return (
     <div className='canvas'>
-      <Modal isShow={modalShow} submitMethod={connectHandler} closeMethod={() => setModalShow(false)}>
-        <Input ref={usernameRef} required placeholder="Your username" name="name" type="text" className="modal__input" />
-        <Button onClick={() => connectHandler()} className='btn'>Log In</Button>
-      </Modal>
       <canvas 
-        onMouseDown={e => canvasState.pushToUndo(e.target.toDataURL())}
+        onMouseDown={mouseDownHandler}
+        onMouseUp={mouseUpHandler}
         ref={canvasRef} width={1000} height={600}
       ></canvas>
     </div>

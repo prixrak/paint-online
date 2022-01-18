@@ -29,12 +29,14 @@ export default class Brush extends Tool {
       this.socketDraw.drawFigure({
         type: 'brush',
         x: e.pageX - e.target.offsetLeft,
-        y: e.pageY - e.target.offsetTop
+        y: e.pageY - e.target.offsetTop,
+        strokeStyle: this.ctx.strokeStyle
       });
     }
   }
 
-  static draw(ctx, x, y) {
+  static draw(ctx, x, y, strokeStyle) {
+    ctx.strokeStyle = strokeStyle;
     ctx.lineTo(x, y);
     ctx.stroke();
   }
