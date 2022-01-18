@@ -14,12 +14,14 @@ export default class Rect extends Tool {
 
   mouseUpHandler(e) {
     this.mouseDown = false;
-    this.socketDraw.drawFigure({
+    this.socketDraw.drawFigure({ // send message to draw rect
       type: 'rect', 
       x: this.startX,
       y: this.startY,
       width: this.width,
-      height: this.height
+      height: this.height,
+      fillStyle: this.ctx.fillStyle,
+      strokeStyle: this.ctx.strokeStyle
     });
     this.socketDraw.finishDrawFigure();
   }
@@ -45,7 +47,7 @@ export default class Rect extends Tool {
     }
   }
 
-  draw(x, y, w, h) {
+  draw(x, y, w, h) { // is to use, when you draw on canvas and want to see, change rect live
     const img = new Image();
     img.src = this.savedCanvas;
     img.onload = () => {
@@ -58,7 +60,10 @@ export default class Rect extends Tool {
     }
   }
 
-  static drawStatic(ctx, x, y, w, h) {
+  static drawStatic(ctx, x, y, w, h, fillStyle, strokeStyle) { // is to use, when u get message from server to draw rect with static value
+    ctx.fillStyle = fillStyle;
+    ctx.strokeStyle = strokeStyle;
+
     ctx.beginPath();
     ctx.rect(x, y, w, h);
     ctx.fill();

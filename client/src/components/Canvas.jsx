@@ -60,7 +60,8 @@ const Canvas = observer(() => {
         Brush.draw(ctx, figure.x, figure.y);
         break;
       case "rect":
-        Rect.drawStatic(ctx, figure.x, figure.y, figure.width, figure.height);
+        console.log("i am here");
+        Rect.drawStatic(ctx, figure.x, figure.y, figure.width, figure.height, figure.fillStyle, figure.strokeStyle);
         break;
       case "finish":
         ctx.beginPath();
