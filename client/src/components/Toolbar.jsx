@@ -7,8 +7,10 @@ import Rect from './../tools/Rect';
 import Circle from './../tools/Circle';
 import Line from './../tools/Line';
 import Eraser from './../tools/Eraser';
+import sessionState from '../store/sessionState';
+import { observer } from 'mobx-react-lite';
 
-const Toolbar = () => {
+const Toolbar = observer(() => {
   let icon = useRef(null);
 
   let changeColor = (e) => {
@@ -19,8 +21,8 @@ const Toolbar = () => {
   
   return (
     <div className='toolbar'>
-      <i data-hint='Draw by Brush' className="fas fa-paint-brush" onClick={() => toolState.setTool(new Brush(canvasState.canvas))}></i>
-      <i data-hint='Draw Reactangle' className="fas fa-square" onClick={() => toolState.setTool(new Rect(canvasState.canvas))}></i>
+      <i data-hint='Draw by Brush' className="fas fa-paint-brush" onClick={() => toolState.setTool(new Brush(canvasState.canvas, sessionState.socketDraw ))}></i>
+      <i data-hint='Draw Reactangle' className="fas fa-square" onClick={() => toolState.setTool(new Rect(canvasState.canvas, sessionState.socketDraw))}></i>
       <i data-hint='Draw Circle' className="fas fa-circle" onClick={() => toolState.setTool(new Circle(canvasState.canvas))}></i>
       <i data-hint='Eraser' className="fas fa-eraser" onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}></i>
       <i data-hint='Draw Line' className="fab fa-line" onClick={() => toolState.setTool(new Line(canvasState.canvas))}></i>
@@ -30,6 +32,6 @@ const Toolbar = () => {
 
     </div>
   );
-};
+});
 
 export default Toolbar;

@@ -1,8 +1,8 @@
 import Tool from "./Tool";
 
 export default class Brush extends Tool {
-  constructor(canvas, socket, sessionId) {
-    super(canvas, socket, sessionId);
+  constructor(canvas, socketDraw) {
+    super(canvas, socketDraw);
     this.listen();
   }
 
@@ -14,13 +14,7 @@ export default class Brush extends Tool {
 
   mouseUpHandler(e) {
     this.mouseDown = false;
-    this.socket.send(JSON.stringify({
-      method: 'draw',
-      id: this.sessionId,
-      figure: {
-        type: 'finish',
-      }
-    }))
+    this.socketDraw.finishDrawFigure();
   }
 
   mouseDownHandler(e) {
@@ -32,15 +26,11 @@ export default class Brush extends Tool {
   mouseMoveHandler(e) {
     if(this.mouseDown) {
       // this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop);
-      this.socket.send(JSON.stringify({
-        method: 'draw',
-        id: this.sessionId,
-        figure: {
-          type: 'brush',
-          x: e.pageX - e.target.offsetLeft,
-          y: e.pageY - e.target.offsetTop
-        }
-      }));
+      this.socketDraw.drawFigure({
+        type: 'brush',
+        x: e.pageX - e.target.offsetLeft,
+        y: e.pageY - e.target.offsetTop
+      });
     }
   }
 

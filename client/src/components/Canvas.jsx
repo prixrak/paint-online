@@ -5,12 +5,13 @@ import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
 import '../styles/canvas.scss';
 import Brush from './../tools/Brush';
-import Button from './Button';
-import Input from './Input';
-import Modal from './Modal';
+import Button from './UI/Button';
+import Input from './UI/Input';
+import Modal from './UI/Modal';
 import { useParams } from 'react-router-dom';
 import sessionState from '../store/sessionState';
 import Rect from './../tools/Rect';
+import SocketDraw from '../socket/SocketDraw';
 
 
 const Canvas = observer(() => {
@@ -26,9 +27,8 @@ const Canvas = observer(() => {
   useEffect(() => { 
     if(sessionState.username !== '') {
       const socket = new WebSocket('ws://localhost:5000/');
-      sessionState.setSocket(socket);
-      sessionState.setSessionId(id);
-      toolState.setTool(new Brush(canvasRef.current, socket, id));
+      sessionState.setSocketDraw(new SocketDraw(socket, id));
+      toolState.setTool(new Brush(canvasRef.current, sessionState.socketDraw));
       socket.onopen = () => {
         socket.send(JSON.stringify({
           method: 'connection',
@@ -50,7 +50,7 @@ const Canvas = observer(() => {
         }
       }
     }
-  }, [sessionState.username]);
+  }, [sessionState.username, id]);
 
   const drawHandler = (msg) => {
     const figure = msg.figure;
@@ -60,7 +60,7 @@ const Canvas = observer(() => {
         Brush.draw(ctx, figure.x, figure.y);
         break;
       case "rect":
-        Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.color);
+        Rect.drawStatic(ctx, figure.x, figure.y, figure.width, figure.height);
         break;
       case "finish":
         ctx.beginPath();

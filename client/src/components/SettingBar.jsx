@@ -1,9 +1,10 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
 import '../styles/settingbar.scss'
 
-const SettingBar = () => {
+const SettingBar = observer(() => {
 
   return (
     <div className='settingbar'>
@@ -22,6 +23,6 @@ const SettingBar = () => {
       <i className="fas fa-save"></i>
     </div>
   );
-};
+});
 
 export default SettingBar;

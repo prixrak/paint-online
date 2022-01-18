@@ -1,5 +1,5 @@
 import React, {useCallback, useRef} from 'react';
-import '../styles/modal.scss';
+import '../../styles/modal.scss';
 
 const Modal = ({isShow, closeMethod, children}) => {
   const modalBackground = useRef(null);

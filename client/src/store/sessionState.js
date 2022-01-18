@@ -2,22 +2,18 @@ import { makeAutoObservable } from "mobx";
 
 class SessionState {
   username = '';
-  socket = null;
-  sessionId = null
+  socketDraw = null;
+
   constructor() {
     makeAutoObservable(this);
   }
 
-  setSocket(socket) {
-    this.socket = socket
-  }
-  
-  setSessionId(id) {
-    this.sessionId = id
+  setSocketDraw(socket) {
+    this.socketDraw = socket;
   }
 
   setUsername(name) {
-    this.username = name
+    this.username = name;
   }
 
 }
