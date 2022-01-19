@@ -1,4 +1,3 @@
-/* eslint-disable default-case */
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useRef, useState } from 'react';
 import canvasState from '../store/canvasState';
@@ -13,6 +12,9 @@ import sessionState from '../store/sessionState';
 import Rect from './../tools/Rect';
 import SocketDraw from '../socket/SocketDraw';
 import axios from 'axios';
+import Circle from './../tools/Circle';
+import Eraser from '../tools/Eraser';
+import Line from './../tools/Line';
 
 const Canvas = observer(() => {
   const canvasRef = useRef(null);
@@ -45,9 +47,11 @@ const Canvas = observer(() => {
           case 'draw':
             drawHandler(msg);
             break;
+          default:
+            console.log('def');
         }
       }
-      let ctx = canvasRef.current.getContext('2d')
+      let ctx = canvasRef.current.getContext('2d');
       axios.get(`http://localhost:5000/image?id=${id}`)
           .then(response => {
               const img = new Image();
@@ -65,18 +69,37 @@ const Canvas = observer(() => {
     const ctx = canvasRef.current.getContext('2d');
     switch (figure.type) {
       case "brush":
-        Brush.draw(ctx, figure.x, figure.y, figure.strokeStyle);
+        Brush.drawStatic(ctx, figure.x, figure.y, figure.strokeStyle, figure.lineWidth);
+        break;
+      case "eraser":
+        Eraser.drawStatic(ctx, figure.x, figure.y,figure.lineWidth);
+        break;
+      case "line":
+        Line.drawStatic(ctx, figure.startX, figure.startY, figure.endX, figure.endY, figure.strokeStyle, figure.lineWidth);
         break;
       case "rect":
-        Rect.drawStatic(ctx, figure.x, figure.y, figure.width, figure.height, figure.fillStyle, figure.strokeStyle);
+        Rect.drawStatic(ctx, figure.x, figure.y, figure.width, figure.height, figure.fillStyle, figure.strokeStyle, figure.lineWidth);
+        break;
+      case "circle":
+        Circle.drawStatic(ctx, figure.x, figure.y, figure.r, figure.fillStyle, figure.strokeStyle, figure.lineWidth);
         break;
       case "finish":
         ctx.beginPath();
         break;
+      default:
+        console.log("def");
     }
   }
 
   const mouseDownHandler = () => {
+    // drop styles of another user to current user settings
+
+    let ctx = canvasRef.current.getContext('2d');
+    ctx.fillStyle = toolState.fillStyle;
+    ctx.strokeStyle = toolState.strokeStyle;
+    ctx.lineWidth = toolState.lineWidth;
+
+    //
     canvasState.pushToUndo(canvasRef.current.toDataURL());
   }
 
@@ -89,7 +112,7 @@ const Canvas = observer(() => {
       <canvas 
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
-        ref={canvasRef} width={1000} height={600}
+        ref={canvasRef} width={1200} height={600}
       ></canvas>
     </div>
   );

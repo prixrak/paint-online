@@ -10,6 +10,7 @@ export default class Brush extends Tool {
     this.canvas.onmousedown = this.mouseDownHandler.bind(this);
     this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
     this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+    this.canvas.onmouseleave = this.mouseUpHandler.bind(this);
   }
 
   mouseUpHandler(e) {
@@ -30,13 +31,15 @@ export default class Brush extends Tool {
         type: 'brush',
         x: e.pageX - e.target.offsetLeft,
         y: e.pageY - e.target.offsetTop,
-        strokeStyle: this.ctx.strokeStyle
+        strokeStyle: this.ctx.strokeStyle,
+        lineWidth: this.ctx.lineWidth
       });
     }
   }
 
-  static draw(ctx, x, y, strokeStyle) {
+  static drawStatic(ctx, x, y, strokeStyle, lineWidth) {
     ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
     ctx.lineTo(x, y);
     ctx.stroke();
   }

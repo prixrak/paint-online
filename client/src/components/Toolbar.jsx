@@ -23,9 +23,9 @@ const Toolbar = observer(() => {
     <div className='toolbar'>
       <i data-hint='Draw by Brush' className="fas fa-paint-brush toolbar__icon" onClick={() => toolState.setTool(new Brush(canvasState.canvas, sessionState.socketDraw ))}></i>
       <i data-hint='Draw Reactangle' className="fas fa-square toolbar__icon" onClick={() => toolState.setTool(new Rect(canvasState.canvas, sessionState.socketDraw))}></i>
-      <i data-hint='Draw Circle' className="fas fa-circle toolbar__icon" onClick={() => toolState.setTool(new Circle(canvasState.canvas))}></i>
-      <i data-hint='Eraser' className="fas fa-eraser toolbar__icon" onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}></i>
-      <i data-hint='Draw Line' className="fab fa-line toolbar__icon" onClick={() => toolState.setTool(new Line(canvasState.canvas))}></i>
+      <i data-hint='Draw Circle' className="fas fa-circle toolbar__icon" onClick={() => toolState.setTool(new Circle(canvasState.canvas, sessionState.socketDraw))}></i>
+      <i data-hint='Eraser' className="fas fa-eraser toolbar__icon" onClick={() => toolState.setTool(new Eraser(canvasState.canvas, sessionState.socketDraw))}></i>
+      <i data-hint='Draw Line' className="fab fa-line toolbar__icon" onClick={() => toolState.setTool(new Line(canvasState.canvas, sessionState.socketDraw))}></i>
       <i data-hint='Set color of tool' ref={icon} className="fas fa-palette toolbar__icon">
         <input type="color" onChange={e => changeColor(e)} id="fill-color"/>
       </i>

@@ -5,7 +5,10 @@ class ToolState {
 
   // save the stroke color, because when we change the tool to an eraser,
   // the stroke color will be set to white, so save it to restore
-  strokeColor = 'black'; 
+  strokeStyle = 'black'; 
+  fillStyle = 'black'; 
+  lineWidth = 1; 
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -15,15 +18,17 @@ class ToolState {
   }
 
   setFillColor(color) {
+    this.fillStyle = color;
     this.tool.fillColor = color;
   }
 
   setStrokeColor(color) {
-    this.strokeColor = color;
+    this.strokeStyle = color;
     this.tool.strokeColor = color;
   }
 
   setLineWidth(width) {
+    this.lineWidth = width;
     this.tool.lineWidth = width;
   }
 }

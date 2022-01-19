@@ -10,6 +10,7 @@ export default class Rect extends Tool {
     this.canvas.onmousedown = this.mouseDownHandler.bind(this);
     this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
     this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+    this.canvas.onmouseleave = this.mouseUpHandler.bind(this);
   }
 
   mouseUpHandler(e) {
@@ -21,7 +22,8 @@ export default class Rect extends Tool {
       width: this.width,
       height: this.height,
       fillStyle: this.ctx.fillStyle,
-      strokeStyle: this.ctx.strokeStyle
+      strokeStyle: this.ctx.strokeStyle,
+      lineWidth: this.ctx.lineWidth
     });
     this.socketDraw.finishDrawFigure();
   }
@@ -60,10 +62,12 @@ export default class Rect extends Tool {
     }
   }
 
-  static drawStatic(ctx, x, y, w, h, fillStyle, strokeStyle) { // is to use, when u get message from server to draw rect with static value
+  // is to use, when u get message from server to 
+  // draw rect with static value
+  static drawStatic(ctx, x, y, w, h, fillStyle, strokeStyle, lineWidth) { 
     ctx.fillStyle = fillStyle;
     ctx.strokeStyle = strokeStyle;
-
+    ctx.lineWidth = lineWidth;
     ctx.beginPath();
     ctx.rect(x, y, w, h);
     ctx.fill();

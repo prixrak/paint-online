@@ -2,15 +2,16 @@ import Tool from "./Tool";
 
 
 export default class Circle extends Tool {
-  constructor(canvas) {
-    super(canvas);
+  constructor(canvas, socketDraw) {
+    super(canvas, socketDraw);
     this.listen();
   }
 
   listen() {
-    this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
     this.canvas.onmousedown = this.mouseDownHandler.bind(this);
+    this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
     this.canvas.onmouseup = this.mouseUpHandler.bind(this);
+    this.canvas.onmouseleave = this.mouseUpHandler.bind(this);
   }
 
   mouseDownHandler(e) {
@@ -23,6 +24,16 @@ export default class Circle extends Tool {
 
   mouseUpHandler(e) {
     this.mouseDown = false;
+    this.socketDraw.drawFigure({ // send message to draw rect
+      type: 'circle', 
+      x: this.startX,
+      y: this.startY,
+      r: this.r,
+      fillStyle: this.ctx.fillStyle,
+      strokeStyle: this.ctx.strokeStyle,
+      lineWidth: this.ctx.lineWidth
+    });
+    this.socketDraw.finishDrawFigure();
   }
 
   mouseMoveHandler(e) {
@@ -31,8 +42,8 @@ export default class Circle extends Tool {
       let curentY = e.pageY - e.target.offsetTop;
       let width = curentX - this.startX;
       let height = curentY - this.startY;
-      let r = Math.sqrt(width ** 2 + height ** 2);
-      this.draw(this.startX, this.startY, r);
+      this.r = Math.sqrt(width ** 2 + height ** 2);
+      this.draw(this.startX, this.startY, this.r);
     }
   }
 
@@ -47,5 +58,18 @@ export default class Circle extends Tool {
       this.ctx.fill();
       this.ctx.stroke();
     }
+  }
+
+
+  // is to use, when u get message from server to 
+  // draw circle with static value
+  static drawStatic(ctx, x, y, r, fillStyle, strokeStyle, lineWidth) { 
+    ctx.fillStyle = fillStyle;
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
   }
 }

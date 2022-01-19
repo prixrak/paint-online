@@ -22,7 +22,7 @@ class SessionState {
 
   setAlert(alert) {
     this.alert = alert;
-    setTimeout(() => this.alert = { show: false, message: ''}, 2000);
+    if(alert.show) setTimeout(() => this.setAlert({ show: false, message: ''}), 2000);
   }
 
 }
