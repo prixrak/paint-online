@@ -32,17 +32,19 @@ export default class Line extends Tool {
   }
   
   mouseUpHandler(e) {
-    this.mouseDown = false;
-    this.socketDraw.drawFigure({ // send message to draw rect
-      type: 'line', 
-      startX: this.startX,
-      startY: this.startY,
-      endX: this.x,
-      endY: this.y,
-      strokeStyle: this.ctx.strokeStyle,
-      lineWidth: this.ctx.lineWidth
-    });
-    this.socketDraw.finishDrawFigure();
+    if(this.mouseDown) {
+      this.mouseDown = false;
+      this.socketDraw.drawFigure({ // send message to draw rect
+        type: 'line', 
+        startX: this.startX,
+        startY: this.startY,
+        endX: this.x,
+        endY: this.y,
+        strokeStyle: this.ctx.strokeStyle,
+        lineWidth: this.ctx.lineWidth
+      });
+      this.socketDraw.finishDrawFigure();
+    }
   }
 
   draw(x, y) {

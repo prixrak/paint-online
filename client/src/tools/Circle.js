@@ -23,17 +23,19 @@ export default class Circle extends Tool {
   }
 
   mouseUpHandler(e) {
-    this.mouseDown = false;
-    this.socketDraw.drawFigure({ // send message to draw rect
-      type: 'circle', 
-      x: this.startX,
-      y: this.startY,
-      r: this.r,
-      fillStyle: this.ctx.fillStyle,
-      strokeStyle: this.ctx.strokeStyle,
-      lineWidth: this.ctx.lineWidth
-    });
-    this.socketDraw.finishDrawFigure();
+    if(this.mouseDown) {
+      this.mouseDown = false;
+      this.socketDraw.drawFigure({ // send message to draw rect
+        type: 'circle', 
+        x: this.startX,
+        y: this.startY,
+        r: this.r,
+        fillStyle: this.ctx.fillStyle,
+        strokeStyle: this.ctx.strokeStyle,
+        lineWidth: this.ctx.lineWidth
+      });
+      this.socketDraw.finishDrawFigure();
+    }
   }
 
   mouseMoveHandler(e) {

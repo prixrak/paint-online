@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect} from 'react';
 import Icon from './../components/Icon';
 import Toolbar from './../components/Toolbar';
 import SettingBar from './../components/SettingBar';
@@ -7,7 +7,11 @@ import Alert from '../components/UI/Alert';
 import sessionState from '../store/sessionState';
 import { observer } from 'mobx-react-lite';
 import '../styles/alert.scss'
+import canvasState from '../store/canvasState';
 const Main = observer(() => {
+  useEffect(() => {
+
+  },[]);
 
   return (
     <>

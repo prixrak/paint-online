@@ -1,31 +1,47 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
 import '../styles/canvas.scss';
 import Brush from './../tools/Brush';
-import Button from './UI/Button';
-import Input from './UI/Input';
-import Modal from './UI/Modal';
 import { useParams } from 'react-router-dom';
 import sessionState from '../store/sessionState';
 import Rect from './../tools/Rect';
 import SocketDraw from '../socket/SocketDraw';
-import axios from 'axios';
 import Circle from './../tools/Circle';
 import Eraser from '../tools/Eraser';
 import Line from './../tools/Line';
+import { getCanvas, postCanvas } from './../API/canvasAPI';
 
 const Canvas = observer(() => {
   const canvasRef = useRef(null);
   const { id } = useParams(); // id of session
 
+  const handleResize = () => {
+    let ctx = canvasRef.current.getContext('2d');
+    const img = new Image();
+    img.src = canvasRef.current.toDataURL();
+    canvasRef.current.width = window.innerWidth - 300;
+    canvasRef.current.height = window.innerHeight - 200;
+    img.onload = () => {
+      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    }
+  }
+
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
+    window.addEventListener('resize', () => {
+      handleResize();
+    });
   }, []);
 
   useEffect(() => { 
+    canvasRef.current.width = window.innerWidth - 300;
+    canvasRef.current.height = window.innerHeight - 200;
     if(sessionState.username !== '') {
+      canvasState.setCanvasId(id);
+      let ctx = canvasRef.current.getContext('2d');
       const socket = new WebSocket('ws://localhost:5000/');
       sessionState.setSocketDraw(new SocketDraw(socket, id));
       toolState.setTool(new Brush(canvasRef.current, sessionState.socketDraw));
@@ -37,7 +53,7 @@ const Canvas = observer(() => {
         }));
       };
 
-      socket.onmessage = (e) => {
+      socket.onmessage = async (e) => {
         const msg = JSON.parse(e.data);
         switch(msg.method) {
           case 'connection':
@@ -47,20 +63,14 @@ const Canvas = observer(() => {
           case 'draw':
             drawHandler(msg);
             break;
+          case 'undoredo':
+            await getCanvas(ctx, canvasRef.current, id);
+            break;
           default:
             console.log('def');
         }
       }
-      let ctx = canvasRef.current.getContext('2d');
-      axios.get(`http://localhost:5000/image?id=${id}`)
-          .then(response => {
-              const img = new Image();
-              img.src = response.data;
-              img.onload = () => {
-                  ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-                  ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height);
-              }
-          });
+      getCanvas(ctx, canvasRef.current, id);
     }
   }, [sessionState.username, id]);
 
@@ -101,10 +111,13 @@ const Canvas = observer(() => {
 
     //
     canvasState.pushToUndo(canvasRef.current.toDataURL());
+
   }
 
   const mouseUpHandler = () => { // when mouseUp on canvas -> save state of canvas in img and post it to server
-    axios.post(`http://localhost:5000/image?id=${id}`, {img: canvasRef.current.toDataURL()});
+    if(!canvasState.redoList.length) {
+      postCanvas(canvasRef.current.toDataURL(), id)
+    }
   }
 
   return (
@@ -112,7 +125,7 @@ const Canvas = observer(() => {
       <canvas 
         onMouseDown={mouseDownHandler}
         onMouseUp={mouseUpHandler}
-        ref={canvasRef} width={1200} height={600}
+        ref={canvasRef} width={1600} height={1600}
       ></canvas>
     </div>
   );

@@ -8,7 +8,8 @@ const ModalUser = () => {
   const usernameRef = React.createRef();
   const [modalShow, setModalShow] = useState(true);
 
-  const connectHandler = () => {
+  const connectHandler = (e) => {
+    e.preventDefault();
     if(usernameRef.current?.value !== '') {
       sessionState.setUsername(usernameRef.current.value);
       setModalShow(false);
@@ -18,7 +19,7 @@ const ModalUser = () => {
   return (
     <Modal isShow={modalShow} submitMethod={connectHandler} closeMethod={() => setModalShow(false)}>
       <Input ref={usernameRef} required placeholder="Your username" name="name" type="text" className="modal__input" />
-      <Button onClick={() => connectHandler()} className='btn'>Log In</Button>
+      <Button onClick={(e) => connectHandler(e)} className='btn'>Log In</Button>
     </Modal>
   );
 };

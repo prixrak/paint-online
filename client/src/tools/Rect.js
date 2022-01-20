@@ -14,18 +14,20 @@ export default class Rect extends Tool {
   }
 
   mouseUpHandler(e) {
-    this.mouseDown = false;
-    this.socketDraw.drawFigure({ // send message to draw rect
-      type: 'rect', 
-      x: this.startX,
-      y: this.startY,
-      width: this.width,
-      height: this.height,
-      fillStyle: this.ctx.fillStyle,
-      strokeStyle: this.ctx.strokeStyle,
-      lineWidth: this.ctx.lineWidth
-    });
-    this.socketDraw.finishDrawFigure();
+    if(this.mouseDown) {
+      this.mouseDown = false;
+      this.socketDraw.drawFigure({ // send message to draw rect
+        type: 'rect', 
+        x: this.startX,
+        y: this.startY,
+        width: this.width,
+        height: this.height,
+        fillStyle: this.ctx.fillStyle,
+        strokeStyle: this.ctx.strokeStyle,
+        lineWidth: this.ctx.lineWidth
+      });
+      this.socketDraw.finishDrawFigure();
+    }
   }
 
   mouseDownHandler(e) {

@@ -31,8 +31,18 @@ const SettingBar = observer(() => {
         data-hint='Border Color' 
         onChange={e => toolState.setStrokeColor(e.target.value)} 
         type="color"/>
-      <i data-hint='Undo' className="fas fa-undo left settingbar__item settingbar__item-right" onClick={() => canvasState.undo()}></i>
-      <i data-hint='Redo' className="fas fa-redo settingbar__item settingbar__item-right" onClick={() => canvasState.redo()}></i>
+      <i data-hint='Undo' className="fas fa-undo left settingbar__item settingbar__item-right" onClick={() => {
+      if(canvasState.undoList.length > 0) {
+        canvasState.undo();
+        sessionState.socketDraw.undoRedo();
+      }
+      }}></i>
+      <i data-hint='Redo' className="fas fa-redo settingbar__item settingbar__item-right" onClick={() => {
+        if(canvasState.redoList.length > 0) {
+          canvasState.redo();
+          sessionState.socketDraw.undoRedo();
+        }
+      }}></i>
       <i data-hint='Save' className="fas fa-save settingbar__item settingbar__item-right" onClick={() => download()}></i>
     </div>
   );

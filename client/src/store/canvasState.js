@@ -1,9 +1,11 @@
 import { makeAutoObservable } from "mobx";
+import { postCanvas } from "../API/canvasAPI";
 
 class CanvasState {
   canvas = null;
   undoList = [];
   redoList = [];
+  canvasId = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -11,6 +13,10 @@ class CanvasState {
 
   setCanvas(canvas) {
     this.canvas = canvas;
+  }
+
+  setCanvasId(id) {
+    this.canvasId = id;
   }
 
   pushToUndo(data) {
@@ -28,6 +34,7 @@ class CanvasState {
         ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
         ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
       }
+      postCanvas(dataUrl, this.canvasId); // post canvas to server and then get it by another user on canvas by specific id
     }
   }
 
@@ -42,6 +49,7 @@ class CanvasState {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
       }
+      postCanvas(dataUrl, this.canvasId); // post canvas to server and then get it by another user on canvas by specific id
     }
   }
 }

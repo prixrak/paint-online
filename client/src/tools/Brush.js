@@ -14,8 +14,10 @@ export default class Brush extends Tool {
   }
 
   mouseUpHandler(e) {
-    this.mouseDown = false;
-    this.socketDraw.finishDrawFigure();
+    if(this.mouseDown) {
+      this.mouseDown = false;
+      this.socketDraw.finishDrawFigure();
+    }
   }
 
   mouseDownHandler(e) {

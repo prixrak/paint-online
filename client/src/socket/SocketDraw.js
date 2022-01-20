@@ -21,4 +21,11 @@ export default class SocketDraw {
       figure
     }));
   }
+
+  undoRedo() {
+    this.socket.send(JSON.stringify({
+      method: 'undoredo',
+      id: this.sessionId
+    }));
+  }
 }
